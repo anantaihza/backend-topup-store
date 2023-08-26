@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const categoriesSchema = mongoose.Schema({
-    name_category: {
+    nameCategory: {
         type: String,
         require: [true, "Nama Kategori tidak boleh kosong."]
     }

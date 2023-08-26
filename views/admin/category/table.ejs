@@ -10,7 +10,7 @@
     <% for( let i = 0; i < category.length; i++ ) { %>
       <tr>
         <td><%= i + 1 %></td>
-        <td><%= category[i].name_category %></td>
+        <td><%= category[i].nameCategory %></td>
         <td>
           <form action="/category/delete/<%= category[i]._id %>?_method=DELETE" method="POST">
             <a href="/category/edit/<%= category[i]._id %>" class="btn btn-warning">

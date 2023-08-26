@@ -9,12 +9,12 @@
                     <div class="container">
                         <div class="row mb-2">
                             <div class="col-sm-6">
-                                <h1>Kategori</h1>
+                                <h1>Nominal</h1>
                             </div>
                             <div class="col-sm-6">
                                 <ol class="breadcrumb float-sm-right">
                                     <li class="breadcrumb-item"><a href="/">Home</a></li>
-                                    <li class="breadcrumb-item"><a href="/category">Kategori</a></li>
+                                    <li class="breadcrumb-item"><a href="/nominal">Nominal</a></li>
                                     <li class="breadcrumb-item active">Edit</li>
                                 </ol>
                             </div>
@@ -32,16 +32,44 @@
                                     <!-- general form elements -->
                                     <div class="card card-primary">
                                         <div class="card-header">
-                                            <h3 class="card-title">Edit Kategori <b><%= category.name_category %></b></h3>
+                                            <h3 class="card-title">Edit Nominal <b><%= nominal.coinName %></b></h3>
                                         </div>
                                         <!-- /.card-header -->
                                         <!-- form start -->
-                                        <form action="/category/edit/<%= category._id %>?_method=PUT" method="POST">
+                                        <form action="/nominal/edit/<%= nominal._id %>?_method=PUT" method="POST">
                                             <div class="card-body">
                                                 <div class="form-group">
-                                                    <label for="name">Nama Kategori</label>
-                                                    <input type="text" class="form-control" id="name" name="nameCategory" value="<%= category.nameCategory %>"
-                                                        placeholder="Ubah Kategori..">
+                                                    <label>Nama Coin</label>
+                                                    <select class="form-control select2" style="width: 100%;" name="coinName" required>
+                                                      <option selected="selected">Pilih Koin</option>
+                                                      <option value="Gold" 
+                                                      <% if (nominal.coinName === "Gold") { %>
+                                                       selected
+                                                      <% } %>
+                                                      >Gold</option>
+                                                      <option value="Diamond" 
+                                                      <% if (nominal.coinName === "Diamond") { %>
+                                                        selected
+                                                       <% } %>
+                                                      >Diamond</option>
+                                                      <option value="Jewel" 
+                                                      <% if (nominal.coinName === "Jewel") { %>
+                                                        selected
+                                                       <% } %>
+                                                      >Jewel</option>
+                                                    </select>
+                                                  </div>
+
+
+                                                <div class="form-group">
+                                                    <label for="coinQuantity">Jumlah Koin</label>
+                                                    <input type="number" class="form-control" id="coinQuantity" name="coinQuantity"
+                                                        placeholder="Masukan jumlah koin..." value="<%= nominal.coinQuantity %>" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="price">Harga</label>
+                                                    <input type="number" class="form-control" id="price" name="price"
+                                                        placeholder="Masukan Harga" value="<%= nominal.price %>" required>
                                                 </div>
                                             </div>
                                             <!-- /.card-body -->
