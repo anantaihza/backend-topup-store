@@ -16,7 +16,7 @@ module.exports = {
         status: alertStatus,
       };
 
-      const voucher = await Vouchers.find();
+      const voucher = await Vouchers.find().populate('category').populate('nominals');
 
       res.render("admin/voucher/view_voucher", {
         title: "Voucher",
