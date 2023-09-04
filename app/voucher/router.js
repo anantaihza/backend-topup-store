@@ -2,7 +2,9 @@ var express = require("express");
 const {
   index,
   viewCreate,
-  actionCreate
+  actionCreate,
+  viewEdit,
+  actionEdit
 } = require("./controller");
 const multer = require('multer')
 const os = require('os')
@@ -12,8 +14,8 @@ var router = express.Router();
 router.get("/", index);
 router.get("/create", viewCreate);
 router.post("/create", multer({dest: os.tmpdir()}).single('image'), actionCreate);
-// router.get("/edit/:id", viewEdit);
-// router.put("/edit/:id", actionEdit);
+router.get("/edit/:id", viewEdit);
+router.put("/edit/:id", multer({dest: os.tmpdir()}).single('image'), actionEdit);
 // router.delete("/delete/:id", actionDelete);
 // router.get('/', function(req, res, next) {
 //   res.render('index', { title: 'Express' });

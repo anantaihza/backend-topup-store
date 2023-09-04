@@ -14,7 +14,7 @@
       <% for( let i = 0; i < voucher.length; i++ ) { %>
         <tr>
           <td class="text-center"><%= i + 1 %></td>
-          <td class="text-center"><img src="/uploads/<%= voucher[i].thumbnail %>" alt="<%= voucher[i].nameGame %>" width="50px"></td>
+          <td class="text-center"><img src="http://localhost:3000/uploads/<%= voucher[i].thumbnail %>" alt="<%= voucher[i].nameGame %>" width="50px"></td>
           <td><%= voucher[i].nameGame %></td>
           <td><%= voucher[i]?.category?.nameCategory ?? '-' %></td>
           <td>

@@ -16,7 +16,9 @@ module.exports = {
         status: alertStatus,
       };
 
-      const voucher = await Vouchers.find().populate('category').populate('nominals');
+      const voucher = await Vouchers.find()
+        .populate("category")
+        .populate("nominals");
 
       res.render("admin/voucher/view_voucher", {
         title: "Voucher",
@@ -109,52 +111,112 @@ module.exports = {
       console.log(error);
       req.flash("alertMessage", `${error.message}`);
       req.flash("alertStatus", "danger");
-      res.redirect("/category");
+      res.redirect("/voucher");
     }
   },
 
-  //   viewEdit: async (req, res) => {
-  //     try {
-  //       const { id } = req.params;
-  //       const category = await Category.findOne({ _id: id });
+  viewEdit: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const voucher = await Vouchers.findOne({ _id: id })
+        .populate("category")
+        .populate("nominals");
+      const category = await Category.find();
+      const nominal = await Nominal.find();
+      console.log(voucher);
 
-  //       res.render("admin/category/edit", {
-  //         title: "Edit Kategori",
-  //         category,
-  //       });
-  //     } catch (error) {
-  //       console.log(error);
-  //       req.flash("alertMessage", `${error.message}`);
-  //       req.flash("alertStatus", "danger");
-  //       res.redirect("/category");
-  //     }
-  //   },
+      res.render("admin/voucher/edit", {
+        title: "Edit Voucher",
+        voucher,
+        category,
+        nominal,
+      });
+    } catch (error) {
+      console.log(error);
+      req.flash("alertMessage", `${error.message}`);
+      req.flash("alertStatus", "danger");
+      res.redirect("/voucher");
+    }
+  },
 
-  //   actionEdit: async (req, res) => {
-  //     try {
-  //       const { id } = req.params;
-  //       const { nameCategory } = req.body;
+  actionEdit: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { nameGame, category, nominals } = req.body;
+      const voucher = await Vouchers.findOne({ _id: id });
 
-  //       const category = await Category.findOne({ _id: id });
+      if (req.file) {
+        let tmp_path = req.file.path;
+        let originalExt =
+          req.file.originalname.split(".")[
+            req.file.originalname.split(".").length - 1
+          ];
+        let filename = req.file.filename + "." + originalExt;
+        let target_path = path.resolve(
+          config.rootPath,
+          `public/uploads/${filename}`
+        );
 
-  //       await Category.findOneAndUpdate(
-  //         {
-  //           _id: id,
-  //         },
-  //         { nameCategory }
-  //       );
+        const src = fs.createReadStream(tmp_path);
+        const dest = fs.createWriteStream(target_path);
 
-  //       req.flash("alertMessage", `Berhasil mengubah kategori ("${category.nameCategory}" menjadi "${nameCategory}")`);
-  //       req.flash("alertStatus", "success");
+        src.pipe(dest);
+        src.on("end", async () => {
+          try {
+            // const voucher = await Vouchers.findOne({ _id: id });
 
-  //       res.redirect("/category");
-  //     } catch (error) {
-  //       console.log(error);
-  //       req.flash("alertMessage", `${error.message}`);
-  //       req.flash("alertStatus", "danger");
-  //       res.redirect("/category");
-  //     }
-  //   },
+            let currentImage = `${config.rootPath}/public/uploads/${voucher.thumbnail}`;
+            if (fs.existsSync(currentImage)) {
+              fs.unlinkSync(currentImage);
+            }
+
+            await Vouchers.findOneAndUpdate(
+              { _id: id },
+              {
+                nameGame,
+                category,
+                nominals,
+                thumbnail: filename,
+              }
+            );
+
+            req.flash(
+              "alertMessage",
+              `Berhasil mengubah Voucher ("${voucher.nameGame}" menjadi "${nameGame}")`
+            );
+            req.flash("alertStatus", "success");
+            res.redirect("/voucher");
+          } catch (error) {
+            console.log(error);
+            req.flash("alertMessage", `${error.message}`);
+            req.flash("alertStatus", "danger");
+            res.redirect("/voucher");
+          }
+        });
+      } else {
+        await Vouchers.findOneAndUpdate(
+          { _id: id },
+          {
+            nameGame,
+            category,
+            nominals,
+          }
+        );
+
+        req.flash(
+          "alertMessage",
+          `Berhasil mengubah Voucher ("${voucher.nameGame}" menjadi "${nameGame}")`
+        );
+        req.flash("alertStatus", "success");
+        res.redirect("/voucher");
+      }
+    } catch (error) {
+      console.log(error);
+      req.flash("alertMessage", `${error.message}`);
+      req.flash("alertStatus", "danger");
+      res.redirect("/voucher");
+    }
+  },
 
   //   actionDelete: async (req, res) => {
   //     try {
