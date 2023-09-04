@@ -218,25 +218,25 @@ module.exports = {
     }
   },
 
-  //   actionDelete: async (req, res) => {
-  //     try {
-  //       const { id } = req.params;
+    actionDelete: async (req, res) => {
+      try {
+        const { id } = req.params;
 
-  //       const category = await Category.findOne({ _id: id });
+        const voucher = await Vouchers.findOne({ _id: id });
 
-  //       await Category.findOneAndRemove({
-  //         _id: id,
-  //       });
+        await Vouchers.findOneAndRemove({
+          _id: id,
+        });
 
-  //       req.flash("alertMessage", `Berhasil menghapus kategori "${category.nameCategory}"`);
-  //       req.flash("alertStatus", "success");
+        req.flash("alertMessage", `Berhasil menghapus voucher "${voucher.nameGame}"`);
+        req.flash("alertStatus", "success");
 
-  //       res.redirect("/category");
-  //     } catch (error) {
-  //       console.log(error);
-  //       req.flash("alertMessage", `${error.message}`);
-  //       req.flash("alertStatus", "danger");
-  //       res.redirect("/category");
-  //     }
-  //   },
+        res.redirect("/voucher");
+      } catch (error) {
+        console.log(error);
+        req.flash("alertMessage", `${error.message}`);
+        req.flash("alertStatus", "danger");
+        res.redirect("/voucher");
+      }
+    },
 };
