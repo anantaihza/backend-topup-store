@@ -5,7 +5,8 @@ const {
   actionCreate,
   viewEdit,
   actionEdit,
-  actionDelete
+  actionDelete,
+  actionStatus
 } = require("./controller");
 const multer = require('multer')
 const os = require('os')
@@ -18,6 +19,7 @@ router.post("/create", multer({dest: os.tmpdir()}).single('image'), actionCreate
 router.get("/edit/:id", viewEdit);
 router.put("/edit/:id", multer({dest: os.tmpdir()}).single('image'), actionEdit);
 router.delete("/delete/:id", actionDelete);
+router.put("/status/:id", actionStatus);
 // router.get('/', function(req, res, next) {
 //   res.render('index', { title: 'Express' });
 // });

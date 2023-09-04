@@ -218,25 +218,54 @@ module.exports = {
     }
   },
 
-    actionDelete: async (req, res) => {
-      try {
-        const { id } = req.params;
+  actionDelete: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { status } = req.body;
 
-        const voucher = await Vouchers.findOne({ _id: id });
+      const voucher = await Vouchers.findOne({ _id: id });
 
-        await Vouchers.findOneAndRemove({
-          _id: id,
-        });
+      await Vouchers.findOneAndRemove({
+        _id: id,
+      });
 
-        req.flash("alertMessage", `Berhasil menghapus voucher "${voucher.nameGame}"`);
-        req.flash("alertStatus", "success");
+      req.flash(
+        "alertMessage",
+        `Berhasil menghapus voucher "${voucher.nameGame}"`
+      );
+      req.flash("alertStatus", "success");
 
-        res.redirect("/voucher");
-      } catch (error) {
-        console.log(error);
-        req.flash("alertMessage", `${error.message}`);
-        req.flash("alertStatus", "danger");
-        res.redirect("/voucher");
+      res.redirect("/voucher");
+    } catch (error) {
+      console.log(error);
+      req.flash("alertMessage", `${error.message}`);
+      req.flash("alertStatus", "danger");
+      res.redirect("/voucher");
+    }
+  },
+  actionStatus: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const voucher = await Vouchers.findOne({ _id: id });
+
+      const updateStatus = voucher.status === "Y" ? "N" : "Y";
+
+      await Vouchers.findOneAndUpdate({ _id: id }, { status: updateStatus });
+
+      if (updateStatus === "Y") {
+        req.flash("alertMessage", `Berhasil mengaktifkan voucher "${voucher.nameGame}"`);
+      } else {
+        req.flash("alertMessage", `Berhasil me-nonaktifkan voucher "${voucher.nameGame}"`);
       }
-    },
+      
+      req.flash("alertStatus", "success");
+      res.redirect("/voucher");
+
+    } catch (error) {
+      console.log(error);
+      req.flash("alertMessage", `${error.message}`);
+      req.flash("alertStatus", "danger");
+      res.redirect("/voucher");
+    }
+  },
 };
