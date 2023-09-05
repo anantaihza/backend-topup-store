@@ -1,5 +1,5 @@
 const Payments = require("./model");
-const Banks = require("../bank/model")
+const Banks = require("../bank/model");
 
 module.exports = {
   index: async (req, res) => {
@@ -29,12 +29,11 @@ module.exports = {
 
   viewCreate: async (req, res) => {
     try {
-
-      const banks = await Banks.find()
+      const banks = await Banks.find();
 
       res.render("admin/payment/create", {
         title: "Create Payment",
-        banks
+        banks,
       });
     } catch (error) {
       console.log(error);
@@ -63,77 +62,77 @@ module.exports = {
     }
   },
 
-//   viewEdit: async (req, res) => {
-//     try {
-//       const { id } = req.params;
-//       const nominal = await Nominal.findOne({ _id: id });
+  viewEdit: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const payment = await Payments.findOne({ _id: id });
+      const banks = await Banks.find();
 
-//       res.render("admin/nominal/edit", {
-//         title: "Edit Nominal",
-//         nominal,
-//       });
-//     } catch (error) {
-//       console.log(error);
-//       req.flash("alertMessage", `${error.message}`);
-//       req.flash("alertStatus", "danger");
-//       res.redirect("/nominal");
-//     }
-//   },
+      res.render("admin/payment/edit", {
+        title: "Edit Payment",
+        banks,
+        payment,
+      });
+    } catch (error) {
+      console.log(error);
+      req.flash("alertMessage", `${error.message}`);
+      req.flash("alertStatus", "danger");
+      res.redirect("/payment");
+    }
+  },
 
-//   actionEdit: async (req, res) => {
-//     try {
-//       const { id } = req.params;
-//       const { coinName, coinQuantity, price } = req.body;
+  actionEdit: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { typePayment, banks } = req.body;
 
-//       const nominal = await Nominal.findOne({ _id: id });
+      const payment = await Payments.findOne({ _id: id });
 
-//       await Nominal.findOneAndUpdate(
-//         {
-//           _id: id,
-//         },
-//         { coinName, coinQuantity, price }
-//       );
+      await Payments.findOneAndUpdate(
+        {
+          _id: id,
+        },
+        { typePayment, banks }
+      );
 
-//       req.flash(
-//         "alertMessage",
-//         `Berhasil mengubah data nominal: 
-//         ("${nominal.coinName}" menjadi "${coinName}"), 
-//         ("${nominal.coinQuantity}" menjadi "${coinQuantity}"), 
-//         ("${nominal.price}" menjadi "${price}")`
-//       );
-//       req.flash("alertStatus", "success");
+      req.flash(
+        "alertMessage",
+        `Berhasil mengubah data nominal: 
+        ("${payment.typePayment}" menjadi "${typePayment}")`
+      );
+      req.flash("alertStatus", "success");
 
-//       res.redirect("/nominal");
-//     } catch (error) {
-//       console.log(error);
-//       req.flash("alertMessage", `${error.message}`);
-//       req.flash("alertStatus", "danger");
-//       res.redirect("/nominal");
-//     }
-//   },
+      res.redirect("/payment");
+    } catch (error) {
+      console.log(error);
+      req.flash("alertMessage", `${error.message}`);
+      req.flash("alertStatus", "danger");
+      res.redirect("/payment");
+    }
+  },
 
-//   actionDelete: async (req, res) => {
-//     try {
-//       const { id } = req.params;
+  actionDelete: async (req, res) => {
+    try {
+      const { id } = req.params;
 
-//       const nominal = await Nominal.findOne({ _id: id });
+      const payment = await Payments.findOne({ _id: id });
 
-//       await Nominal.findOneAndRemove({
-//         _id: id,
-//       });
+      await Payments.findOneAndRemove({
+        _id: id,
+      });
 
-//       req.flash(
-//         "alertMessage",
-//         `Berhasil menghapus Nominal "${nominal.coinName}"`
-//       );
-//       req.flash("alertStatus", "success");
+      req.flash(
+        "alertMessage",
+        `Berhasil menghapus Nominal "${payment.typePayment}"`
+      );
+      req.flash("alertStatus", "success");
 
-//       res.redirect("/nominal");
-//     } catch (error) {
-//       console.log(error);
-//       req.flash("alertMessage", `${error.message}`);
-//       req.flash("alertStatus", "danger");
-//       res.redirect("/nominal");
-//     }
-//   },
+      res.redirect("/payment");
+    } catch (error) {
+      console.log(error);
+      req.flash("alertMessage", `${error.message}`);
+      req.flash("alertStatus", "danger");
+      res.redirect("/payment");
+    }
+  },
 };
